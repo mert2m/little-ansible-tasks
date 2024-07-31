@@ -1,0 +1,25 @@
+---
+- hosts: all
+  tasks:
+    - name: Get the IP addresses of the new servers
+      vmware_vcenter_vm_info:
+        hostname: 192.168.1.1
+        username: admin
+        password: secret
+        filter:
+          name: "{{item}}"
+      register: new_servers
+    - name: Create DNS records for the new servers
+      host: named
+      tasks:
+        - name: Create DNS record for {{item.name}}
+          dnsmasq:
+            name: "{{item.name}}"
+            ip_address: "{{item.ip_address}}"
+    - name: Include the new servers in the web site
+      apache:
+        state: present
+        site: mysite
+        files:
+          - /var/www/mysite/index.html
+  loop: "{{new_servers.results}}"
