@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+  gather_facts: false
+  tasks:
+    - name: Change root password
+      shell: echo "root:{{ pass }}" | chpasswd
