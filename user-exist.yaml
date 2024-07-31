@@ -12,3 +12,22 @@
         name: expect
         state: present
       when: ansible_distribution == 'OracleLinux'
+
+    - name: Try to login with given username and password
+      expect:
+        command: ssh {{ ansible_ssh_host }} -l {{ username }} -o StrictHostKeyChecking=no
+        responses:
+          Password: "{{ password }}"
+      become: false
+      register: ssh_login       
+
+    - name: Test sudo access
+      command: sudo -l -U {{ username }}
+      become: true
+      register: sudo_access
+      when: ssh_login.changed
+
+    - name: Fail if sudo access not granted
+      fail:
+        msg: "sudo access not granted on {{ ansible_ssh_host }}"
+      when: "'is not allowed' in sudo_access.stdout"
