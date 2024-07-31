@@ -1,0 +1,10 @@
+---
+- name: Restart chronyd Service
+  hosts: all
+  become: yes  
+
+  tasks:
+    - name: Restart chronyd service
+      systemd:
+        name: chronyd
+        state: restarted
