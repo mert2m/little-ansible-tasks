@@ -1,0 +1,11 @@
+---
+hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Add crontjob
+      ansible.builtin.cron:
+        name: "SSSD Restart"
+        minute: "1"
+        job: "systemctl restart sssd"
+        state: "present"
