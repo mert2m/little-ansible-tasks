@@ -1,0 +1,17 @@
+---
+- name: List Local Users on Linux Servers
+  hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: get Hostname
+      command: hostname
+      register: hostname
+
+    - name: Get local users
+      shell: "cat /etc/passwd | cut -d: -f1 | grep -vE 'daemon|bin|sys|sync|nobody|nogroup|lp|mail|news|root'"
+      register: local_users
+
+    - name: Display local users
+      debug:
+        msg: "Sunucu: {{ hostname.stdout }} - Kullanıcılar: {{ local_users.stdout_lines }}"
