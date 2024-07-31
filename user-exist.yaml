@@ -1,0 +1,14 @@
+---
+- name: Check user login and sudo access
+  hosts: all
+  become: true
+  vars:
+    username: acet
+    password: acet
+
+  tasks:
+    - name: Install pexpect package
+      yum:
+        name: expect
+        state: present
+      when: ansible_distribution == 'OracleLinux'
