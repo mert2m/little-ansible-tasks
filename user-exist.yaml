@@ -3,8 +3,8 @@
   hosts: all
   become: true
   vars:
-    username: acet
-    password: acet
+    username: mert
+    password: mert
 
   tasks:
     - name: Install pexpect package
