@@ -1,0 +1,17 @@
+- hosts: all
+  become: true
+  gather_facts: false
+  tasks:  
+    - name: Stopping sssd service
+      service:
+        name: sssd
+        state: stopped
+    
+    - name: Delete all cache files
+      ansible.builtin.shell:  rm -f /var/lib/sss/db/cache_*.ldb
+
+    - name: Starting sssd
+      service:
+        name: sssd
+        state: started
+        enabled: yes
